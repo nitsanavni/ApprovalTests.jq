@@ -33,6 +33,7 @@ function verify_test_method() {
     else
         if ! diff -u $approved_file $received_file; then
             echo "  🚫 failed" >&2
+            eval "$DIFF_TOOL $received_file $approved_file"
             exit 1
         else
             echo "  ✅ passed" >&2
@@ -62,4 +63,15 @@ function run_tests() {
     done
 }
 
-run_tests
+function set_diff_tool() {
+    if [ -z "$DIFF_TOOL" ]; then
+        export DIFF_TOOL="true"
+    fi
+}
+
+function main() {
+    set_diff_tool
+    run_tests
+}
+
+main
